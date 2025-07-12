@@ -9,14 +9,12 @@ const Submission = require("../models/submission")
 const register = async (req, res) => {
 
     try {
-        // validate the data;
-        // console.log("📥 Incoming register request:", req.body);
         validate(req.body);
         const { firstName, emailId, password } = req.body;
 
         req.body.password = await bcrypt.hash(password, 10);
         req.body.role = 'user'
-        //
+        
 
         const user = await User.create(req.body);
         const token = jwt.sign({ _id: user._id, emailId: emailId, role: 'user' }, process.env.JWT_KEY, { expiresIn: 60 * 60 });
